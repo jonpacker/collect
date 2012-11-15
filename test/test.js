@@ -19,7 +19,7 @@ describe('collect', function() {
     ], done);
   });
   it('should wait for a bunch of streams to finish', function(done) {
-    var collection = collect();
+    var collection = collect.collection();
     collection.push(ws1);
     ws1.write("thing");
     ws2.write("other_thing");
@@ -29,6 +29,33 @@ describe('collect', function() {
     collection.push(ws3);
 
     collection.collect(function(cb) {
+      assert(!ws1.writable);
+      assert(!ws2.writable);
+      assert(!ws3.writable);
+
+      async.map(['ws1.txt', 'ws2.txt', 'ws3.txt'],
+        naan.ncurry(fs.readFile, 'utf8', 1),
+        function(e, d) {
+          assert.deepEqual([
+            'thing',
+            'other_thing',
+            'extra thinganother thing'
+          ], d);
+          done();
+        });
+    });
+
+    ws1.end();
+    ws2.end();
+    ws3.end();
+  });
+  it('should also work with a terse syntax', function(done) {
+    ws1.write("thing");
+    ws2.write("other_thing");
+    ws3.write("extra thing");
+    ws3.write("another thing");
+
+    collect([ws1, ws2, ws3], function(cb) {
       assert(!ws1.writable);
       assert(!ws2.writable);
       assert(!ws3.writable);
