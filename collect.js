@@ -6,17 +6,24 @@ module.exports = function collection() {
     push: collection.push.bind(collection),
     collection: collection,
     collect: function(cb) {
-      async.waiters(collection.map(function(stream) {
+      async.parallel(collection.map(function(stream) {
         var waiter = false;
-        stream.on('end', function() {
+
+        var finished = function() {
           if (typeof waiter == 'function') waiter();
           else waiter = true;
-        });
+        };
+
+        stream.on('close', finished);
+        stream.on('end', finished);
+
         var cb = function(cb) { 
           if (waiter === true) cb();
           else waiter = cb;
         };
+
+        return cb;
       }), cb);
-    };
+    }
   }
 };
