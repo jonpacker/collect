@@ -1,6 +1,9 @@
 # collect
 
-Collect waits for a bunch of streams to end and then calls back. Easy.
+Collect waits for a bunch of streams to end and then calls back, like some kind
+of magical stream catcher.
+
+<img src="http://i.imgur.com/gZjQ1.jpg" height="200"/>
 
 ## install
 
