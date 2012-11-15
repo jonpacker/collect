@@ -1,6 +1,6 @@
 var async = require('async');
 
-module.exports = function collection() {
+var collection = function collection() {
   var collection = [];
   return {
     push: collection.push.bind(collection),
@@ -27,3 +27,10 @@ module.exports = function collection() {
     }
   }
 };
+
+module.exports = function collect(streams, cb) {
+  var coll = collection();
+  streams.forEach(function(stream) { coll.push(stream) });
+  coll.collect(cb);
+};
+module.exports.collection = collection;
