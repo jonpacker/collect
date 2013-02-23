@@ -100,5 +100,5 @@ await.then(function(err, results) {
 Development of Collect is lovingly sponsored by 
 [BRIK Tekonologier AS](http://www.github.com/brikteknologier) in Bergen, Norway.
 
-<img src="http://i.imgur.com/9JjcBcx.jpg" width="400"/>
+<img src="http://i.imgur.com/9JjcBcx.jpg" width="800"/>
 
