@@ -94,3 +94,11 @@ await.then(function(err, results) {
   assert(results.stuff[0] == 'cabbage');
 });
 ```
+
+---
+
+Development of Collect is lovingly sponsored by 
+[BRIK Tekonologier AS](http://www.github.com/brikteknologier) in Bergen, Norway.
+
+<img src="http://i.imgur.com/g7lPW.jpg"/>
+
