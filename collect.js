@@ -33,4 +33,7 @@ module.exports = function collect(streams, cb) {
   streams.forEach(function(stream) { coll.push(stream) });
   coll.collect(cb);
 };
+
+module.exports.awaiter = require('./awaiter');
+
 module.exports.collection = collection;
