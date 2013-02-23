@@ -2,6 +2,7 @@
 module.exports = function waiter() {
   var args = [].slice.call(arguments);
   var cb = args.pop();
+  if (typeof cb != 'function') args.push(cb), cb = function(){};
   var results = {};
   var flags = {};
 
@@ -9,7 +10,7 @@ module.exports = function waiter() {
     flags[flagName] = false;
   });
 
-  var hasCallbackBackWithError = false;
+  var hasCalledBackWithError = false;
 
   var collect = function() {
     var hasTriggered = true;
@@ -24,8 +25,8 @@ module.exports = function waiter() {
 
   var createCallback = function(flagName) {
     return function(err) {
-      if (hasCallbackBackWithError) return;
-      else if (err) return hasCallbackBackWithError = true, cb(err);
+      if (hasCalledBackWithError) return;
+      else if (err) return hasCalledBackWithError = true, cb(err);
       
       var args = [].slice.call(arguments, 1);
 
@@ -35,6 +36,8 @@ module.exports = function waiter() {
       collect();
     };
   };
+
+  createCallback.then = function(newCb) { cb = newCb; };
 
   return createCallback;
 };
