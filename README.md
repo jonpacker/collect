@@ -95,6 +95,27 @@ await.then(function(err, results) {
 });
 ```
 
+### awaiter.num(number, cb)
+
+This version of awaiter does not require you to name your callbacks, just tell
+it how many of them you need and it will provide them.
+
+Example:
+
+```
+var collect = require('collect');
+
+var numAwaiter = collect.awaiter.num(3);
+
+fs.readFile('chapter-1.md', 'utf8', numAwaiter());
+fs.readFile('chapter-2.md', 'utf8', numAwaiter());
+fs.readFile('chapter-3.md', 'utf8', numAwaiter());
+
+numAwaiter.then(function(err, results) {
+  // `results` is an array
+  var chapters = results.join('\n\n');
+});
+
 ---
 
 Development of Collect is lovingly sponsored by 
