@@ -115,6 +115,7 @@ numAwaiter.then(function(err, results) {
   // `results` is an array
   var chapters = results.join('\n\n');
 });
+```
 
 ---
 
