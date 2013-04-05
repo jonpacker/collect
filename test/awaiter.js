@@ -64,36 +64,98 @@ describe('awaiter', function() {
     waiter('peas')(null, 'mushy');
   });
 
-  it('should call back given a number of callbacks', function(done) {
-    var waiter = awaiter.num(5);
-    var count = 0;
-    waiter.then(function() {
-      assert(count == 5);
-      done();
-    });
-    
-    ++count, waiter()();
-    ++count, waiter()();
-    ++count, waiter()();
-    ++count, waiter()();
-    ++count, waiter()();
-  });
-  
-  it('should call back given a number of callbacks and return stuff', 
+  it('should fire a cb immediately when added if all cbs had already fired',
   function(done) {
-    var waiter = awaiter.num(5);
-    var count = 0;
-    waiter.then(function(err, res) {
-      assert(count == 5);
-      assert(!err);
-      assert(res.join('') == 'Nytelsesmiddelarbeiderforbundet');
+    var waiter = awaiter('potato');
+
+    waiter.alsoAwait('peas');
+    waiter('potato')(null, 'mashy');
+    waiter('peas')(null, 'mushy');
+
+    waiter.then(function(err, results) {
+      assert(results.potato == 'mashy');
+      assert(results.peas = 'mushy');
       done();
     });
+  });
+
+  describe('num', function() {
+    it('should call back given a number of callbacks', function(done) {
+      var waiter = awaiter.num(5);
+      var count = 0;
+      waiter.then(function() {
+        assert(count == 5);
+        done();
+      });
+      
+      ++count, waiter()();
+      ++count, waiter()();
+      ++count, waiter()();
+      ++count, waiter()();
+      ++count, waiter()();
+    });
     
-    ++count, waiter()(null, 'Nytelses');
-    ++count, waiter()(null, 'middel');
-    ++count, waiter()(null, 'arbeider');
-    ++count, waiter()(null, 'forbund');
-    ++count, waiter()(null, 'et');
+    it('should call back given a number of callbacks and return stuff', 
+    function(done) {
+      var waiter = awaiter.num(5);
+      var count = 0;
+      waiter.then(function(err, res) {
+        assert(count == 5);
+        assert(!err);
+        assert(res.join('') == 'Nytelsesmiddelarbeiderforbundet');
+        done();
+      });
+      
+      ++count, waiter()(null, 'Nytelses');
+      ++count, waiter()(null, 'middel');
+      ++count, waiter()(null, 'arbeider');
+      ++count, waiter()(null, 'forbund');
+      ++count, waiter()(null, 'et');
+    });
+    
+    it('should call back more than once', 
+    function(done) {
+      var waiter = awaiter.num(5);
+      var count = 0;
+      var cbnum = 0;
+      waiter.then(function(err, res) {
+        assert(count == 5);
+        assert(!err);
+        assert(res.join('') == 'Nytelsesmiddelarbeiderforbundet');
+        cbnum++;
+      });
+      waiter.then(function(err, res) {
+        assert(count == 5);
+        assert(!err);
+        assert(res.join('') == 'Nytelsesmiddelarbeiderforbundet');
+        cbnum++;
+      });
+      
+      ++count, waiter()(null, 'Nytelses');
+      ++count, waiter()(null, 'middel');
+      ++count, waiter()(null, 'arbeider');
+      ++count, waiter()(null, 'forbund');
+      ++count, waiter()(null, 'et');
+
+      assert(cbnum == 2);
+      done();
+    });
+
+    it('should be consistent with errors', function() {
+      var firstWasErr = false;
+      var secondWasErr = false;
+      var thirdWasErr = false
+      var waiter = awaiter.num(2, function(err) { firstWasErr = !!err; });
+
+      waiter.then(function(err) { secondWasErr = !!err });
+      waiter()(true);
+      assert(firstWasErr);
+      assert(secondWasErr);
+
+      waiter()(null, 'potato');
+      waiter.then(function(err) { thirdWasErr = !!err });
+
+      assert(thirdWasErr);
+    });
   });
 });
