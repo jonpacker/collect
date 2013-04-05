@@ -157,5 +157,30 @@ describe('awaiter', function() {
 
       assert(thirdWasErr);
     });
+
+    it('should support arbitrary counts', function(done) {
+      var waiter = awaiter.num();
+
+      waiter()(null, 'potato')
+      waiter()(null, 'peas')
+      waiter()(null, 'pie')
+      
+      var cbcalled = false;
+      waiter.then(function(err, res) {
+        assert(res.length == 3);
+        assert(res[0] == 'potato');
+        assert(res[1] == 'peas');
+        assert(res[2] == 'pie');
+        cbcalled = true;
+      });
+
+      waiter()(null, 'superman');
+
+      waiter.then(function(err,res) {
+        assert.deepEqual(res, ['potato', 'peas', 'pie', 'superman']);
+        assert(cbcalled == true);
+        done();
+      });
+    });
   });
 });
