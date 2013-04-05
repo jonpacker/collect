@@ -145,7 +145,7 @@ describe('awaiter', function() {
       var firstWasErr = false;
       var secondWasErr = false;
       var thirdWasErr = false
-      var waiter = awaiter.num(2, function(err) { firstWasErr = !!err; });
+      var waiter = awaiter.num(3,function(err) { firstWasErr = !!err; });
 
       waiter.then(function(err) { secondWasErr = !!err });
       waiter()(true);
