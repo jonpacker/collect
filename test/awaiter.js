@@ -51,6 +51,19 @@ describe('awaiter', function() {
     waiter('scary')();
   });
 
+  it('should be able to receive extra await requests after creation',
+  function(done) {
+    var waiter = awaiter('potato', function(err, results) {
+      assert(results.potato == 'mashy');
+      assert(results.peas = 'mushy');
+      done();
+    });
+
+    waiter.alsoAwait('peas');
+    waiter('potato')(null, 'mashy');
+    waiter('peas')(null, 'mushy');
+  });
+
   it('should call back given a number of callbacks', function(done) {
     var waiter = awaiter.num(5);
     var count = 0;
