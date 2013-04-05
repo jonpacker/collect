@@ -37,6 +37,7 @@ function awaiter() {
   };
 
   createCallback.then = function(newCb) { cb = newCb; };
+  createCallback.alsoAwait = function(newThing) { args.push(newThing) };
 
   return createCallback;
 };
