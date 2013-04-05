@@ -132,6 +132,20 @@ numAwaiter.then(function(err, results) {
 });
 ```
 
+You can also use an arbitrary number of callbacks like so:
+
+```
+var waiter = awaiter.num();
+
+waiter()(null, 'potato')
+waiter()(null, 'peas')
+waiter()(null, 'pie')
+
+waiter.then(function(err, res) {
+});
+
+```
+
 ---
 
 Development of Collect is lovingly sponsored by 
