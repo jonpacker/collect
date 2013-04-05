@@ -95,6 +95,21 @@ await.then(function(err, results) {
 });
 ```
 
+If don't know exactly what you want at the time of awaiter creation, you can add
+dependencies later on. 
+
+```
+var awaiter = awaiter('potato');
+
+//later on
+
+awaiter.alsoAwait('peas');
+
+awaiter.then(function(err, results) { 
+  // results now has potato AND peas! sweet!
+});
+```
+
 ### awaiter.num(number, cb)
 
 This version of awaiter does not require you to name your callbacks, just tell
