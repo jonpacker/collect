@@ -1,6 +1,6 @@
 {
   "name": "collect",
-  "version": "0.3.2",
+  "version": "0.3.3",
   "description": "collect a bunch of streams and wait til they've finished",
   "main": "collect.js",
   "directories": {
