@@ -50,4 +50,37 @@ describe('awaiter', function() {
     waiter('dangerous')(new Error('OH DEAR'));
     waiter('scary')();
   });
+
+  it('should call back given a number of callbacks', function(done) {
+    var waiter = awaiter.num(5);
+    var count = 0;
+    waiter.then(function() {
+      assert(count == 5);
+      done();
+    });
+    
+    ++count, waiter()();
+    ++count, waiter()();
+    ++count, waiter()();
+    ++count, waiter()();
+    ++count, waiter()();
+  });
+  
+  it('should call back given a number of callbacks and return stuff', 
+  function(done) {
+    var waiter = awaiter.num(5);
+    var count = 0;
+    waiter.then(function(err, res) {
+      assert(count == 5);
+      assert(!err);
+      assert(res.join() == 'Nytelsesmiddelarbeiderforbundet');
+      done();
+    });
+    
+    ++count, waiter()(null, 'Nytelses');
+    ++count, waiter()(null, 'middel);
+    ++count, waiter()(null, 'arbeider');
+    ++count, waiter()(null, 'forbund');
+    ++count, waiter()(null, 'et');
+  });
 });
