@@ -1,5 +1,4 @@
-
-module.exports = function waiter() {
+function awaiter() {
   var args = [].slice.call(arguments);
   var cb = args.pop();
   if (typeof cb != 'function') args.push(cb), cb = function(){};
@@ -41,3 +40,28 @@ module.exports = function waiter() {
 
   return createCallback;
 };
+
+awaiter.num = function(count, cb) {
+  var nums = [], i = 0;
+  while (++i <= count) nums.push(i);
+
+  nums.push(function(err, res) {
+    if (err) cb && cb(err);
+    var i = 0;
+    var resArr = [];
+    while (++i <= count) resArr.push(res[i]);
+    cb(null, resArr);
+  });
+  var awaiterInst = awaiter.apply(this, nums);
+
+  i = 0;
+  var createNumberedCallback = function() {
+    return awaiterInst(++i);
+  };
+
+  createNumberedCallback.then = function(newCb) { cb = newCb };
+
+  return createNumberedCallback;
+};
+
+module.exports = awaiter;

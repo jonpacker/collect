@@ -73,12 +73,12 @@ describe('awaiter', function() {
     waiter.then(function(err, res) {
       assert(count == 5);
       assert(!err);
-      assert(res.join() == 'Nytelsesmiddelarbeiderforbundet');
+      assert(res.join('') == 'Nytelsesmiddelarbeiderforbundet');
       done();
     });
     
     ++count, waiter()(null, 'Nytelses');
-    ++count, waiter()(null, 'middel);
+    ++count, waiter()(null, 'middel');
     ++count, waiter()(null, 'arbeider');
     ++count, waiter()(null, 'forbund');
     ++count, waiter()(null, 'et');
